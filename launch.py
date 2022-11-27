@@ -241,10 +241,20 @@ def tests(argv):
     proc.kill()
 
 
+def cli_process_name():
+    if '--initialize-only' in sys.argv:
+        return "Initialization"
+    elif '--nowebui' in sys.argv:
+        return "API server"
+    else:
+        return "Web UI"
+
 def start():
-    print(f"Launching {'API server' if '--nowebui' in sys.argv else 'Web UI'} with arguments: {' '.join(sys.argv[1:])}")
+    print(f"Launching {cli_process_name()} with arguments: {' '.join(sys.argv[1:])}")
     import webui
-    if '--nowebui' in sys.argv:
+    if '--initialize-only' in sys.argv:
+        webui.initialize()
+    elif '--nowebui' in sys.argv:
         webui.api_only()
     else:
         webui.webui()
